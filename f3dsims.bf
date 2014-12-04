@@ -31,6 +31,9 @@ function apply (key, value) {
     return 0;
 }
 
+//global nonsyn = nonsynvals[0][0];
+//global syn = synvals[0][0];
+
 for (branch_id = 0; branch_id < Columns(topology_branch_names)-1; branch_id += 1) {
     branch_name = topology_branch_names[branch_id];
     full_name = "bsrel_tree.`branch_name`";
@@ -39,8 +42,16 @@ for (branch_id = 0; branch_id < Columns(topology_branch_names)-1; branch_id += 1
     ExecuteCommands("Model MGlocal = (MGMatrix" + matrices_defined + ", codon3x4, 0)");
 
     ExecuteCommands ("SetParameter (`full_name`, MODEL, MGlocal);");
-    *(full_name + ".nonsyn") = nonsynvals[0][0];
-    *(full_name + ".syn") = synvals[0][0];
+
+    length_info = (bsrel_settings[branch_name])["length"];
+    length = length_info[0];
+    *(full_name + ".nonsyn") = nonsynvals[0][0] * length;
+    *(full_name + ".syn") = synvals[0][0] * length;
+    //fprintf(stdout, "" + length[0] + "\n");
+    //fprintf(stdout, "" + nonsynvals[0][0] * length + "\n");
+    //fprintf(stdout, "" + synvals[0][0] * length + "\n");
+    //*(full_name + ".nonsyn") = nonsynvals[0][0];
+    //*(full_name + ".syn") = synvals[0][0];
 }
 
 codonCharacters = {{"A","C","G","T"}
@@ -63,8 +74,14 @@ for (it = 1; it < codons; it += 1) {
     for (branch_id = 0; branch_id < Columns(topology_branch_names)-1; branch_id += 1) {
         branch_name = topology_branch_names[branch_id];
         full_name = "bsrel_tree.`branch_name`";
-        *(full_name + ".nonsyn") = nonsynvals[0][it];
-        *(full_name + ".syn") = synvals[0][it];
+        //*(full_name + ".nonsyn") = nonsynvals[0][it];
+        //*(full_name + ".syn") = synvals[0][it];
+        //nonsyn = nonsynvals[0][it];
+        //syn = synvals[0][it];
+        length_info = (bsrel_settings[branch_name])["length"];
+        length = length_info[0];
+        *(full_name + ".nonsyn") = nonsynvals[0][0] * length;
+        *(full_name + ".syn") = synvals[0][0] * length;
     }
     DataSet sim = Simulate(bsrel_tree,codon3x4,codonCharacters,1,0);
     DataSet combinedSet = Concatenate(combinedSet, sim);

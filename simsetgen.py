@@ -44,7 +44,8 @@ def generate_settings(num_taxa,
     # make the distributions from which omegas are sampled
     # closures:
     nonsyngens = [make_gen(.4, .1), make_gen(4, .25)]
-    syngens = [make_gen(1, .8), make_gen(1, .8)]
+    #syngens = [make_gen(.4, .8), make_gen(.4, .8)]
+    syngens = [make_gen(1, .2), make_gen(1, .2)]
     nonsynsamples = []
     synsamples = []
     for i in distribution:
@@ -76,6 +77,8 @@ def generate_settings(num_taxa,
 
 def params_to_string_alpha(param_list):
     entry = "\"" + param_list["name"] + "\" : {"
+    entry += "\t\"length\" : {{" + param_list["length"][0]
+    entry += "}},\n"
     entry += "\t\"omegas\" : {"
     for n,s,p in zip(param_list["nonsyns"], param_list["syns"], param_list["props"]):
         entry += "\t{ " + str(n) + ", " + str(s) + ", "  + str(p) + "}\n"
@@ -85,6 +88,10 @@ def params_to_string_alpha(param_list):
 def generate_taxa(tax_name):
   entry = {}
   entry["name"] = str(tax_name)
+  length = -1
+  while length <= 0:
+    length = NP.random.normal(0.3, .2)
+  entry["length"] = [str(length)]
   entry["nonsyns"] = [math.e]
   entry["syns"] = [math.e]
   entry["props"] = [1]
