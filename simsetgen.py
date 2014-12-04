@@ -8,7 +8,7 @@ from treegen import get_unrooted_tree
 def make_gen(mean, stdev):
   def omegen():
     sample = -1
-    while sample < 0:
+    while sample <= 0:
       sample = NP.random.normal(mean, stdev)
     return sample
   return omegen
