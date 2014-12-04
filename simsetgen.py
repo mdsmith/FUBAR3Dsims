@@ -15,7 +15,7 @@ def make_gen(mean, stdev):
 
 def list_to_hylist(name, pylist):
   strpylist = [str(a) for a in pylist]
-  return name + " = {" + ', '.join(strpylist) + "};\n"
+  return name + " = {{" + ', '.join(strpylist) + "}};\n"
 
 def generate_settings(num_taxa,
                       distribution,
