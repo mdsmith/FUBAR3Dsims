@@ -76,14 +76,14 @@ def generate_settings(num_taxa,
     return this_set
 
 def params_to_string_alpha(param_list):
-    entry = "\"" + param_list["name"] + "\" : {"
-    entry += "\t\"length\" : {{" + param_list["length"][0]
-    entry += "}},\n"
-    entry += "\t\"omegas\" : {"
-    for n,s,p in zip(param_list["nonsyns"], param_list["syns"], param_list["props"]):
-        entry += "\t{ " + str(n) + ", " + str(s) + ", "  + str(p) + "}\n"
-    entry += "}\n},\n"
-    return entry
+  entry = "\"" + param_list["name"] + "\" : {"
+  entry += "\t\"length\" : {{" + param_list["length"][0]
+  entry += "}},\n"
+  entry += "\t\"omegas\" : {"
+  for n,s,p in zip(param_list["nonsyns"], param_list["syns"], param_list["props"]):
+    entry += "\t{ " + str(n) + ", " + str(s) + ", "  + str(p) + "}\n"
+  entry += "}\n},\n"
+  return entry
 
 def generate_taxa(tax_name):
   entry = {}
@@ -111,16 +111,28 @@ def rep_csv(csv_file_name):
       dist_reps[i].append(token)
   return dist_reps
 
+def generate_all_settings(num_taxa, dist_file, out_base):
+  reps = rep_csv(dist_file)
+  for i, rep in enumerate(reps):
+    generate_settings(num_taxa,
+                      rep,
+                      out_base + "." + str(i))
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('num_taxa', help="the number of taxa to simulate")
-    parser.add_argument('distribution_samples',
-                        help="the csv of which distribution to sample")
-    parser.add_argument('out_file',
-                        help="the base output file name")
-    args = parser.parse_args()
-    distribution_reps = rep_csv(args.distribution_samples)
-    for i, distribution in enumerate(distribution_reps):
-      generate_settings(int(args.num_taxa),
-                        distribution,
-                        args.out_file + "." + str(i))
+  parser = argparse.ArgumentParser()
+  parser.add_argument('num_taxa', help="the number of taxa to simulate")
+  parser.add_argument('distribution_samples',
+                      help="the csv of which distribution to sample")
+  parser.add_argument('out_file',
+                      help="the base output file name")
+  args = parser.parse_args()
+  generate_all_settings(int(args.num_taxa),
+                        args.distribution_samples,
+                        args.out_file)
+  '''
+  distribution_reps = rep_csv(args.distribution_samples)
+  for i, distribution in enumerate(distribution_reps):
+    generate_settings(int(args.num_taxa),
+                      distribution,
+                      args.out_file + "." + str(i))
+  '''
