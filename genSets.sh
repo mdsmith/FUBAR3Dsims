@@ -1,5 +1,5 @@
 #!/bin/bash
-for k in *.csv; do
+for k in $1/*.csv; do
   newname=$k.sim;
-  python3 ../simsetgen.py 4 $k $newname ;
+  python3 simsetgen.py 16 $k $newname ;
 done
