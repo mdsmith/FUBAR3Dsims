@@ -21,4 +21,5 @@ parameters to simsetgen.py in genSets.sh to include
 
     --nonsyn mu1 sigma1 mu2 sigma2
 and
+
     --syn mu1 sigma1 mu2 sigma2
