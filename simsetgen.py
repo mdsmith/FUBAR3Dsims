@@ -125,7 +125,8 @@ def generate_all_settings(num_taxa, dist_file, out_base, nonsyn, syn):
                       syn)
 
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser()
+  parser = argparse.ArgumentParser(
+              formatter_class=argparse.ArgumentDefaultsHelpFormatter)
   parser.add_argument('num_taxa', help="the number of taxa to simulate")
   parser.add_argument('distribution_samples',
                       help="the csv of which distribution to sample")
