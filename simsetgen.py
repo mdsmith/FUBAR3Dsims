@@ -19,7 +19,9 @@ def list_to_hylist(name, pylist):
 
 def generate_settings(num_taxa,
                       distribution,
-                      out_name):
+                      out_name,
+                      nonsyn,
+                      syn):
     #print(num_taxa)
     #print(distribution)
     #print(out_name)
@@ -43,9 +45,11 @@ def generate_settings(num_taxa,
 
     # make the distributions from which omegas are sampled
     # closures:
-    nonsyngens = [make_gen(.4, .1), make_gen(4, .25)]
+    nonsyngens = [make_gen(nonsyn[0], nonsyn[1]),
+                  make_gen(nonsyn[2], nonsyn[3])]
     #syngens = [make_gen(.4, .8), make_gen(.4, .8)]
-    syngens = [make_gen(1, .2), make_gen(1, .2)]
+    syngens = [ make_gen(syn[0], syn[1]),
+                make_gen(syn[2], syn[3])]
     nonsynsamples = []
     synsamples = []
     for i in distribution:
@@ -111,12 +115,14 @@ def rep_csv(csv_file_name):
       dist_reps[i].append(token)
   return dist_reps
 
-def generate_all_settings(num_taxa, dist_file, out_base):
+def generate_all_settings(num_taxa, dist_file, out_base, nonsyn, syn):
   reps = rep_csv(dist_file)
   for i, rep in enumerate(reps):
     generate_settings(num_taxa,
                       rep,
-                      out_base + "." + str(i))
+                      out_base + "." + str(i),
+                      nonsyn,
+                      syn)
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -125,14 +131,21 @@ if __name__ == "__main__":
                       help="the csv of which distribution to sample")
   parser.add_argument('out_file',
                       help="the base output file name")
+  parser.add_argument('--nonsyn',
+                      nargs=4,
+                      default=[4, 1, 0.4, 0.2],
+                      type=float,
+                      help="the mean and stdevs of the two nonsynonymous \
+                          distributions")
+  parser.add_argument('--syn',
+                      nargs=4,
+                      default=[0.4, 0.1, 0.4, 0.1],
+                      type=float,
+                      help="the mean and stdevs of the two synonymous \
+                          distributions")
   args = parser.parse_args()
   generate_all_settings(int(args.num_taxa),
                         args.distribution_samples,
-                        args.out_file)
-  '''
-  distribution_reps = rep_csv(args.distribution_samples)
-  for i, distribution in enumerate(distribution_reps):
-    generate_settings(int(args.num_taxa),
-                      distribution,
-                      args.out_file + "." + str(i))
-  '''
+                        args.out_file,
+                        args.nonsyn,
+                        args.syn)
