@@ -3,7 +3,7 @@
 import numpy as NP
 import argparse
 import math
-from treegen import get_unrooted_tree
+import treegen
 
 def make_gen(mean, stdev):
   def omegen():
@@ -30,7 +30,7 @@ def generate_settings(num_taxa,
     buffer = []
 
     #treeDef = "Tree bsrel_tree = ((1,2)Interior,3,4);\n"
-    treeDef = "Tree bsrel_tree = "  + get_unrooted_tree(num_taxa) + ";\n"
+    treeDef = "Tree bsrel_tree = "  + treegen.get_unrooted_tree_iteratively(num_taxa) + ";\n"
     codoDef = "nuc3x4 = {4,3} [\"0.25\"];\n"
     nucbDef =   "nucleotide_bias_settings = { // relative to AG\n" \
                 "\"AC\": 0.25,\n" \
